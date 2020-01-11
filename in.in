@@ -1,0 +1,8 @@
+begin_program
+int a;
+int b;
+
+begin_block
+	a = 3;
+end_block
+end_program

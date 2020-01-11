@@ -1,0 +1,16 @@
+assume cs:code, ds:data
+data SEGMENT
+buffer dw 100
+b dw 1
+a dw 1
+data ENDS
+code SEGMENT
+start:
+mov ax, data
+mov ds, ax
+mov ax, 3
+mov a, ax
+mov ax, 4C00h
+int 21h
+code ENDS
+END start
