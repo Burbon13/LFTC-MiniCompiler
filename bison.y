@@ -96,14 +96,14 @@ program: BEGIN_PROGRAM lista_declaratii BEGIN_BLOCK lista_instr END_BLOCK END_PR
 lista_declaratii: tip ID SEMICOLON
 						{
 							char *tmp = (char *)malloc(sizeof(char)*100);
-							sprintf(tmp, "%s dw 1\n", $2);
+							sprintf(tmp, "%s dd 1\n", $2);
 							addTempToDS(tmp);
 							free(tmp);
 						}
 					| tip ID SEMICOLON lista_declaratii
 						{
 							char *tmp = (char *)malloc(sizeof(char)*100);
-							sprintf(tmp, "%s dw 1\n", $2);
+							sprintf(tmp, "%s dd 1\n", $2);
 							addTempToDS(tmp);
 							free(tmp);
 						}
@@ -125,7 +125,7 @@ instr_atribuire: ID ASSUME expresie SEMICOLON
 						{
 							char *tmp = (char *)malloc(sizeof(char)*100);
 							//expression result is in temp, so we move it into ID
-							sprintf(tmp, "mov ax, %s\n", $3.varn);
+							sprintf(tmp, "mov eax, %s\n", $3.varn);
 							addTempToCS(tmp);
 							sprintf(tmp, "mov %s, ax\n", $1);
 							addTempToCS(tmp);
@@ -267,51 +267,46 @@ char *moveVarToPrintBuffer(char *s) {
 }
 
 void writeAssemblyToFile() {
-	char *assume = (char *) malloc(sizeof(char)*30);
-	char *beginDS = (char *) malloc(sizeof(char)*20);
-	char *printBuffer = (char *) malloc(sizeof(char)*100);
-	char *endDS = (char *) malloc(sizeof(char)*20);
+	char *bits32 = (char *) malloc(sizeof(char)*30);
+	char *globalStart = (char *) malloc(sizeof(char)*20);
+	char *imports = (char *) malloc(sizeof(char)*100);
+	char *dataSegment = (char *) malloc(sizeof(char)*100);
 	char *beginCS = (char *) malloc(sizeof(char)*20);
 	char *start = (char *) malloc(sizeof(char)*10);
 	char *endCS = (char *) malloc(sizeof(char)*30);
 	char *init_code = (char *) malloc(sizeof(char)*30);
 	char *end_code = (char *) malloc(sizeof(char)*30);
 	
-	sprintf(assume, "assume cs:code, ds:data\n");
-	sprintf(beginDS, "data SEGMENT\n");
-	sprintf(printBuffer, "buffer dw 100\n");
-	sprintf(endDS, "data ENDS\n");
-	sprintf(beginCS, "code SEGMENT\n");
+	sprintf(bits32, "bits32\n\n");
+	sprintf(globalStart, "global start\n\n");
+	sprintf(imports, "extern exit, printf, scanf\nimport exit msvcrt.dll\nimport printf msvcrt.dll\nimport scanf msvcrt.dll\n\n");
+	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 0\n", "%d");
+	sprintf(beginCS, "\nsegment code use32 class=code\n");
 	sprintf(start, "start:\n");
-	sprintf(endCS, "code ENDS\nEND start");
-	sprintf(init_code, "mov ax, data\nmov ds, ax\n");
-	sprintf(end_code, "mov ax, 4C00h\nint 21h\n");
+	sprintf(endCS, "push dword 0\ncall [exit]\n");
 
 	FILE *f = fopen("out.out", "w");
 	if(f == NULL) {
 		perror("Mayday -> file out.out has failed.");
 		exit(1);
 	}
-	fwrite(assume, strlen(assume), 1, f);
-	fwrite(beginDS, strlen(beginDS), 1, f);
-	fwrite(printBuffer, strlen(printBuffer), 1, f);
+	fwrite(bits32, strlen(bits32), 1, f);
+	fwrite(globalStart, strlen(globalStart), 1, f);
+	fwrite(imports, strlen(imports), 1, f);
+	fwrite(dataSegment, strlen(dataSegment), 1, f);
 	fwrite(DS, strlen(DS), 1, f);
-	fwrite(endDS, strlen(endDS), 1, f);
 	fwrite(beginCS, strlen(beginCS), 1, f);
 	fwrite(start, strlen(start), 1, f);
-	fwrite(init_code, strlen(init_code), 1, f);
 	fwrite(CS, strlen(CS), 1, f);
-	fwrite(end_code, strlen(end_code), 1, f);
 	fwrite(endCS, strlen(endCS), 1, f);
 
 	fclose(f);
-	free(assume);
-	free(beginDS);
-	free(endDS);
+	free(bits32);
+	free(globalStart);
+	free(dataSegment);
+	free(imports);
 	free(beginCS);
 	free(start);
-	free(init_code);
-	free(end_code);
 	free(endCS);
 }
 

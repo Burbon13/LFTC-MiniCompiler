@@ -1,0 +1,40 @@
+     1                                  
+     2                                  
+     3                                  ; Codul de mai jos va afisa mesajul ”n=”, apoi va citi de la tastatura valoarea numarului n.
+     4                                  bits 32
+     5                                  
+     6                                  global start        
+     7                                  
+     8                                  ; declararea functiilor externe folosite de program
+     9                                  extern exit, printf, scanf ; adaugam printf si scanf ca functii externa            
+    10                                  import exit msvcrt.dll    
+    11                                  import printf msvcrt.dll    ; indicam asamblorului ca functia printf se gaseste in libraria msvcrt.dll
+    12                                  import scanf msvcrt.dll     ; similar pentru scanf
+    13                                                            
+    14                                  segment data use32 class=data
+    15 00000000 00000000                	n dd  0       ; in aceasta variabila se va stoca valoarea citita de la tastatura
+    16                                      ; sirurile de caractere sunt de tip byte
+    17 00000004 6E3D00                  	message  db "n=", 0  ; sirurile de caractere pentru functiile C trebuie sa se termine cu valoarea 0 (nu caracterul)
+    18 00000007 256400                  	format  db "%d", 0  ; %d <=> un numar decimal (baza 10)
+    19                                      
+    20                                  segment code use32 class=code
+    21                                      start:
+    22                                         
+    23                                          ; vom apela printf(message) => se va afisa "n="
+    24                                          ; punem parametrii pe stiva
+    25 00000000 68[04000000]                    push dword message ; ! pe stiva se pune adresa string-ului, nu valoarea
+    26 00000005 FF15[00000000]                  call [printf]      ; apelam functia printf pentru afisare
+    27 0000000B 83C404                          add esp, 4*1       ; eliberam parametrii de pe stiva ; 4 = dimensiunea unui dword; 1 = nr de parametri
+    28                                                                                     
+    29                                          ; vom apela scanf(format, n) => se va citi un numar in variabila n
+    30                                          ; punem parametrii pe stiva de la dreapta la stanga
+    31 0000000E 68[00000000]                    push dword n       ; ! adresa lui n, nu valoarea
+    32 00000013 68[07000000]                     push dword format
+    33 00000018 FF15[00000000]                  call [scanf]       ; apelam functia scanf pentru citire
+    34 0000001E 83C408                          add esp, 4 * 2     ; eliberam parametrii de pe stiva
+    35                                                             ; 4 = dimensiunea unui dword; 2 = nr de parametri
+    36                                          
+    37                                          ; exit(0)
+    38 00000021 6A00                            push dword 0      ; punem pe stiva parametrul pentru exit
+    39 00000023 FF15[00000000]                  call [exit]       ; apelam exit pentru a incheia programul
+    40                                  
