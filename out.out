@@ -22,66 +22,63 @@ temp4 dd 0
 
 segment code use32 class=code
 start:
-; a = 1
-mov eax, 1
+; a = 20
+mov eax, 20
 mov [a], eax
-; 2 + 3
-mov eax, 2
-add eax, 3
-mov [temp1], eax
-; b = temp1
-mov eax, [temp1]
+; b = 5
+mov eax, 5
 mov [b], eax
-; 10 - 4
-mov eax, 10
-sub eax, 4
-mov [temp2], eax
-; c = temp2
-mov eax, [temp2]
+; 100 + [b]
+mov eax, 100
+add eax, [b]
+mov [temp1], eax
+; c = temp1
+mov eax, [temp1]
 mov [c], eax
-; 3 * 7
-mov eax, 3
-mov ebx, 7
-imul ebx
-mov [temp3], eax
-; d = temp3
-mov eax, [temp3]
-mov [d], eax
-; 60 / 4
-mov edx, 0
-mov eax, 60
-mov ebx, 4
-idiv ebx
-mov [temp4], eax
-; e = temp4
-mov eax, [temp4]
-mov [e], eax
-; print(a)
-mov eax, [a]
-push dword eax
-push dword int_format
-call [printf]
-add esp, 4 * 2
-; print(b)
-mov eax, [b]
-push dword eax
-push dword int_format
-call [printf]
-add esp, 4 * 2
 ; print(c)
 mov eax, [c]
 push dword eax
 push dword int_format
 call [printf]
 add esp, 4 * 2
-; print(d)
-mov eax, [d]
+; 100 - [b]
+mov eax, 100
+sub eax, [b]
+mov [temp2], eax
+; c = temp2
+mov eax, [temp2]
+mov [c], eax
+; print(c)
+mov eax, [c]
 push dword eax
 push dword int_format
 call [printf]
 add esp, 4 * 2
-; print(e)
-mov eax, [e]
+; 100 * [b]
+mov eax, 100
+mov ebx, [b]
+imul ebx
+mov [temp3], eax
+; c = temp3
+mov eax, [temp3]
+mov [c], eax
+; print(c)
+mov eax, [c]
+push dword eax
+push dword int_format
+call [printf]
+add esp, 4 * 2
+; 100 / [b]
+mov edx, 0
+mov eax, 100
+mov ebx, [b]
+idiv ebx
+mov [temp4], eax
+; c = temp4
+mov eax, [temp4]
+mov [c], eax
+; print(c)
+mov eax, [c]
 push dword eax
 push dword int_format
 call [printf]
