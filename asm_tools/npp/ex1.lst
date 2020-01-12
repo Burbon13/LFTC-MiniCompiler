@@ -8,81 +8,43 @@
      8                                  import scanf msvcrt.dll
      9                                  
     10                                  segment data use32 class=data
-    11 00000000 6E3D00                  read_int_msg db "n=", 0
+    11 00000000 3E3E00                  read_int_msg db ">>", 0
     12 00000003 25640A00                int_format db "%d", 10, 0
-    13 00000007 00000000                e dd 0
-    14 0000000B 00000000                d dd 0
-    15 0000000F 00000000                c dd 0
-    16 00000013 00000000                b dd 0
-    17 00000017 00000000                a dd 0
-    18 0000001B 00000000                temp1 dd 0
-    19 0000001F 00000000                temp2 dd 0
-    20 00000023 00000000                temp3 dd 0
-    21 00000027 00000000                temp4 dd 0
-    22                                  
-    23                                  segment code use32 class=code
-    24                                  start:
-    25                                  ; a = 20
-    26 00000000 B814000000              mov eax, 20
-    27 00000005 A3[17000000]            mov [a], eax
-    28                                  ; b = 5
-    29 0000000A B805000000              mov eax, 5
-    30 0000000F A3[13000000]            mov [b], eax
-    31                                  ; 100 + [b]
-    32 00000014 B864000000              mov eax, 100
-    33 00000019 0305[13000000]          add eax, [b]
-    34 0000001F A3[1B000000]            mov [temp1], eax
-    35                                  ; c = temp1
-    36 00000024 A1[1B000000]            mov eax, [temp1]
-    37 00000029 A3[0F000000]            mov [c], eax
-    38                                  ; print(c)
-    39 0000002E A1[0F000000]            mov eax, [c]
-    40 00000033 50                      push dword eax
-    41 00000034 68[03000000]            push dword int_format
-    42 00000039 FF15[00000000]          call [printf]
-    43 0000003F 83C408                  add esp, 4 * 2
-    44                                  ; 100 - [b]
-    45 00000042 B864000000              mov eax, 100
-    46 00000047 2B05[13000000]          sub eax, [b]
-    47 0000004D A3[1F000000]            mov [temp2], eax
-    48                                  ; c = temp2
-    49 00000052 A1[1F000000]            mov eax, [temp2]
-    50 00000057 A3[0F000000]            mov [c], eax
-    51                                  ; print(c)
-    52 0000005C A1[0F000000]            mov eax, [c]
-    53 00000061 50                      push dword eax
-    54 00000062 68[03000000]            push dword int_format
-    55 00000067 FF15[00000000]          call [printf]
-    56 0000006D 83C408                  add esp, 4 * 2
-    57                                  ; 100 * [b]
-    58 00000070 B864000000              mov eax, 100
-    59 00000075 8B1D[13000000]          mov ebx, [b]
-    60 0000007B F7EB                    imul ebx
-    61 0000007D A3[23000000]            mov [temp3], eax
-    62                                  ; c = temp3
-    63 00000082 A1[23000000]            mov eax, [temp3]
-    64 00000087 A3[0F000000]            mov [c], eax
-    65                                  ; print(c)
-    66 0000008C A1[0F000000]            mov eax, [c]
-    67 00000091 50                      push dword eax
-    68 00000092 68[03000000]            push dword int_format
-    69 00000097 FF15[00000000]          call [printf]
-    70 0000009D 83C408                  add esp, 4 * 2
-    71                                  ; 100 / [b]
-    72 000000A0 BA00000000              mov edx, 0
-    73 000000A5 B864000000              mov eax, 100
-    74 000000AA 8B1D[13000000]          mov ebx, [b]
-    75 000000B0 F7FB                    idiv ebx
-    76 000000B2 A3[27000000]            mov [temp4], eax
-    77                                  ; c = temp4
-    78 000000B7 A1[27000000]            mov eax, [temp4]
-    79 000000BC A3[0F000000]            mov [c], eax
-    80                                  ; print(c)
-    81 000000C1 A1[0F000000]            mov eax, [c]
-    82 000000C6 50                      push dword eax
-    83 000000C7 68[03000000]            push dword int_format
-    84 000000CC FF15[00000000]          call [printf]
-    85 000000D2 83C408                  add esp, 4 * 2
-    86                                  ; exit(0)
-    87 000000D5 6A00                    push dword 0
-    88 000000D7 FF15[00000000]          call [exit]
+    13 00000007 256400                  read_int_f db "%d", 0
+    14 0000000A 00000000                e dd 0
+    15 0000000E 00000000                d dd 0
+    16 00000012 00000000                c dd 0
+    17 00000016 00000000                b dd 0
+    18 0000001A 00000000                a dd 0
+    19 0000001E 00000000                temp1 dd 0
+    20                                  
+    21                                  segment code use32 class=code
+    22                                  start:
+    23 00000000 68[00000000]            push dword read_int_msg
+    24 00000005 FF15[00000000]          call [printf]
+    25 0000000B 83C404                  add esp, 4 * 1
+    26 0000000E 68[1A000000]            push dword a
+    27 00000013 68[07000000]            push dword read_int_f
+    28 00000018 FF15[00000000]          call [scanf]
+    29 0000001E 83C408                   add esp, 4 * 2; print(a)
+    30 00000021 A1[1A000000]            mov eax, [a]
+    31 00000026 50                      push dword eax
+    32 00000027 68[03000000]            push dword int_format
+    33 0000002C FF15[00000000]          call [printf]
+    34 00000032 83C408                  add esp, 4 * 2
+    35                                  ; [a] + 4
+    36 00000035 A1[1A000000]            mov eax, [a]
+    37 0000003A 83C004                  add eax, 4
+    38 0000003D A3[1E000000]            mov [temp1], eax
+    39                                  ; a = temp1
+    40 00000042 A1[1E000000]            mov eax, [temp1]
+    41 00000047 A3[1A000000]            mov [a], eax
+    42                                  ; print(a)
+    43 0000004C A1[1A000000]            mov eax, [a]
+    44 00000051 50                      push dword eax
+    45 00000052 68[03000000]            push dword int_format
+    46 00000057 FF15[00000000]          call [printf]
+    47 0000005D 83C408                  add esp, 4 * 2
+    48                                  ; exit(0)
+    49 00000060 6A00                    push dword 0
+    50 00000062 FF15[00000000]          call [exit]

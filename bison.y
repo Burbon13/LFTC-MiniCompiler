@@ -223,7 +223,11 @@ instr_io: WRITE LEFT_BRACKET ID RIGHT_BRACKET SEMICOLON
 	| READ LEFT_BRACKET termen RIGHT_BRACKET SEMICOLON	
 	{
 		char *tmp = (char *)malloc(sizeof(char)*100);
-		sprintf(tmp, "mov ah, 0Ah\nmov dx, offset %s\nint 21h\n", $3.varn);
+
+		sprintf(tmp, "push dword read_int_msg\ncall [printf]\nadd esp, 4 * 1\n");
+		addTempToCS(tmp);
+
+		sprintf(tmp, "push dword %s\npush dword read_int_f\ncall [scanf]\n add esp, 4 * 2", $3.pointer);
 		addTempToCS(tmp);
 	}
 	;
@@ -233,6 +237,7 @@ termen: ID
 				{
 					strcpy($$.cod, "");
 					sprintf($$.varn, "[%s]", $1); 
+					sprintf($$.pointer, "%s", $1); 
 				}
 		| CONST	
 			{
@@ -293,7 +298,7 @@ void writeAssemblyToFile() {
 	sprintf(bits32, "bits 32\n\n");
 	sprintf(globalStart, "global start\n\n");
 	sprintf(imports, "extern exit, printf, scanf\nimport exit msvcrt.dll\nimport printf msvcrt.dll\nimport scanf msvcrt.dll\n\n");
-	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 10, 0\n", "%d");
+	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \">>\", 0\nint_format db \"%s\", 10, 0\nread_int_f db \"%s\", 0\n", "%d", "%d");
 	sprintf(beginCS, "\nsegment code use32 class=code\n");
 	sprintf(start, "start:\n");
 	sprintf(endCS, "; exit(0)\npush dword 0\ncall [exit]\n");

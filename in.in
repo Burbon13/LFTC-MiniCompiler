@@ -6,15 +6,9 @@ int d;
 int e;
 
 begin_block
-	a = 20;
-	b = 5;
-	c = 100 + b;
-	write(c);
-	c = 100 - b;
-	write(c);
-	c = 100 * b;
-	write(c);
-	c = 100 / b;
-	write(c);
+	read(a);
+	write(a);
+	a = a + 4;
+	write(a);
 end_block
 end_program

@@ -517,8 +517,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    94,    94,    97,   104,   113,   114,   117,   118,   121,
-     122,   125,   144,   145,   161,   177,   195,   217,   223,   232,
-     237
+     122,   125,   144,   145,   161,   177,   195,   217,   223,   236,
+     242
 };
 #endif
 
@@ -1580,23 +1580,28 @@ yyreduce:
 #line 224 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
-		sprintf(tmp, "mov ah, 0Ah\nmov dx, offset %s\nint 21h\n", (yyvsp[(3) - (5)].attrib).varn);
+
+		sprintf(tmp, "push dword read_int_msg\ncall [printf]\nadd esp, 4 * 1\n");
+		addTempToCS(tmp);
+
+		sprintf(tmp, "push dword %s\npush dword read_int_f\ncall [scanf]\n add esp, 4 * 2", (yyvsp[(3) - (5)].attrib).pointer);
 		addTempToCS(tmp);
 	}
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 233 "bison.y"
+#line 237 "bison.y"
     {
 					strcpy((yyval.attrib).cod, "");
 					sprintf((yyval.attrib).varn, "[%s]", (yyvsp[(1) - (1)].varname)); 
+					sprintf((yyval.attrib).pointer, "%s", (yyvsp[(1) - (1)].varname)); 
 				}
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 238 "bison.y"
+#line 243 "bison.y"
     {
 				strcpy((yyval.attrib).cod, "");
 				strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname)); 
@@ -1605,7 +1610,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 1609 "bison.tab.c"
+#line 1614 "bison.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1837,7 +1842,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 244 "bison.y"
+#line 249 "bison.y"
 
 
 int main(int argc, char *argv[]) {	
@@ -1890,7 +1895,7 @@ void writeAssemblyToFile() {
 	sprintf(bits32, "bits 32\n\n");
 	sprintf(globalStart, "global start\n\n");
 	sprintf(imports, "extern exit, printf, scanf\nimport exit msvcrt.dll\nimport printf msvcrt.dll\nimport scanf msvcrt.dll\n\n");
-	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 10, 0\n", "%d");
+	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \">>\", 0\nint_format db \"%s\", 10, 0\nread_int_f db \"%s\", 0\n", "%d", "%d");
 	sprintf(beginCS, "\nsegment code use32 class=code\n");
 	sprintf(start, "start:\n");
 	sprintf(endCS, "; exit(0)\npush dword 0\ncall [exit]\n");
