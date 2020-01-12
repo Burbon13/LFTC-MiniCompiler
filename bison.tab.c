@@ -517,8 +517,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    94,    94,    97,   104,   113,   114,   117,   118,   121,
-     122,   125,   144,   145,   163,   181,   201,   223,   234,   243,
-     248
+     122,   125,   144,   145,   161,   177,   195,   217,   223,   232,
+     237
 };
 #endif
 
@@ -1483,12 +1483,10 @@ yyreduce:
 /* Line 1792 of yacc.c  */
 #line 146 "bison.y"
     {
-					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf((yyval.attrib).varn, "%s", temp); 
 					
-					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s + %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
 					addTempToCS(tmp);
@@ -1503,14 +1501,12 @@ yyreduce:
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 164 "bison.y"
+#line 162 "bison.y"
     {
-					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf((yyval.attrib).varn, "%s", temp);
 								
-					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s - %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
 					addTempToCS(tmp);
@@ -1525,14 +1521,12 @@ yyreduce:
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 182 "bison.y"
+#line 178 "bison.y"
     {
-					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf((yyval.attrib).varn, "%s", temp);
 					
-					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s * %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
 					addTempToCS(tmp);
@@ -1549,15 +1543,15 @@ yyreduce:
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 202 "bison.y"
+#line 196 "bison.y"
     {
-					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf((yyval.attrib).varn, "%s", temp);
 							
-					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
+					sprintf(tmp, "; %s / %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
+					addTempToCS(tmp);
 					sprintf(tmp, "mov edx, 0\n");
 					addTempToCS(tmp);
 					sprintf(tmp, "mov eax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
@@ -1573,22 +1567,17 @@ yyreduce:
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 224 "bison.y"
+#line 218 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
-		//addTempToCS(moveVarToPrintBuffer($3));
-		//sprintf(tmp, "mov eax, [%s]\n", $3);
-		//sprintf(tmp, "push dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n");
-
 		sprintf(tmp, "; print(%s)\nmov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", (yyvsp[(3) - (5)].varname), (yyvsp[(3) - (5)].varname));
-
 		addTempToCS(tmp);
 	}
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 235 "bison.y"
+#line 224 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		sprintf(tmp, "mov ah, 0Ah\nmov dx, offset %s\nint 21h\n", (yyvsp[(3) - (5)].attrib).varn);
@@ -1598,7 +1587,7 @@ yyreduce:
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 244 "bison.y"
+#line 233 "bison.y"
     {
 					strcpy((yyval.attrib).cod, "");
 					sprintf((yyval.attrib).varn, "[%s]", (yyvsp[(1) - (1)].varname)); 
@@ -1607,7 +1596,7 @@ yyreduce:
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 249 "bison.y"
+#line 238 "bison.y"
     {
 				strcpy((yyval.attrib).cod, "");
 				strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname)); 
@@ -1616,7 +1605,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 1620 "bison.tab.c"
+#line 1609 "bison.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1848,7 +1837,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 255 "bison.y"
+#line 244 "bison.y"
 
 
 int main(int argc, char *argv[]) {	
@@ -1860,9 +1849,7 @@ int main(int argc, char *argv[]) {
 		perror("Could not open file!");
 		exit(1);
 	}
-	//set the input for the flex file
 	yyin = f;
-	//read each line from the input file and process it
 	while(!feof(yyin)) {
 		yyparse();
 	}

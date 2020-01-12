@@ -144,12 +144,10 @@ instr_atribuire: ID ASSUME expresie SEMICOLON
 expresie: termen
 			| termen PLUS termen
 				{
-					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf($$.varn, "%s", temp); 
 					
-					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s + %s\n", $1, $3);
 					addTempToCS(tmp);
@@ -162,12 +160,10 @@ expresie: termen
 				}
 			| termen MINUS termen
 				{
-					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf($$.varn, "%s", temp);
 								
-					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s - %s\n", $1, $3);
 					addTempToCS(tmp);
@@ -180,12 +176,10 @@ expresie: termen
 				}
 			| termen MULTIPLY termen
 				{
-					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf($$.varn, "%s", temp);
 					
-					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s * %s\n", $1, $3);
 					addTempToCS(tmp);
@@ -200,13 +194,13 @@ expresie: termen
 				}
 			| termen DIVIDE termen
 				{
-					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf($$.varn, "%s", temp);
 							
-					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
+					sprintf(tmp, "; %s / %s\n", $1, $3);
+					addTempToCS(tmp);
 					sprintf(tmp, "mov edx, 0\n");
 					addTempToCS(tmp);
 					sprintf(tmp, "mov eax, %s\n", $1.varn);
@@ -223,12 +217,7 @@ expresie: termen
 instr_io: WRITE LEFT_BRACKET ID RIGHT_BRACKET SEMICOLON
 	{
 		char *tmp = (char *)malloc(sizeof(char)*100);
-		//addTempToCS(moveVarToPrintBuffer($3));
-		//sprintf(tmp, "mov eax, [%s]\n", $3);
-		//sprintf(tmp, "push dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n");
-
 		sprintf(tmp, "; print(%s)\nmov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", $3, $3);
-
 		addTempToCS(tmp);
 	}	
 	| READ LEFT_BRACKET termen RIGHT_BRACKET SEMICOLON	
@@ -263,9 +252,7 @@ int main(int argc, char *argv[]) {
 		perror("Could not open file!");
 		exit(1);
 	}
-	//set the input for the flex file
 	yyin = f;
-	//read each line from the input file and process it
 	while(!feof(yyin)) {
 		yyparse();
 	}

@@ -47,6 +47,7 @@ mov [temp3], eax
 ; d = temp3
 mov eax, [temp3]
 mov [d], eax
+; 60 / 4
 mov edx, 0
 mov eax, 60
 mov ebx, 4
