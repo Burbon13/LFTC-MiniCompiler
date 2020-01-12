@@ -82,10 +82,10 @@ extern char *yytext;
 void yyerror(char *s);
 
 //the variable containing the DataSegment for the assembly program
-char DS[1000];
+char DS[10000];
 
 //the variable containing the CodeSegment for the assembly program
-char CS[1000];
+char CS[10000];
 
 //add variables to DataSegment
 void addTempToDS(char *s);
@@ -1846,8 +1846,8 @@ yyreturn:
 
 
 int main(int argc, char *argv[]) {	
-	memset(DS, 0, 1000);
-	memset(CS, 0, 1000);
+	memset(DS, 0, 10000);
+	memset(CS, 0, 10000);
 
 	FILE *f = fopen("in.in", "r");
 	if(!f) {
