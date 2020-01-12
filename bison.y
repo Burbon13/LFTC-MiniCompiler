@@ -5,6 +5,7 @@
 
 %{
 
+#include <ctype.h>
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -125,7 +126,14 @@ instr_atribuire: ID ASSUME expresie SEMICOLON
 						{
 							char *tmp = (char *)malloc(sizeof(char)*100);
 							//expression result is in temp, so we move it into ID
-							sprintf(tmp, "mov eax, %s\n", $3.varn);
+							sprintf(tmp, "; %s = %s\n", $1, $3);
+							addTempToCS(tmp);
+							if(isdigit($3.varn[0])) {
+								sprintf(tmp, "mov eax, %s\n", $3.varn);
+							} 
+							else {
+								sprintf(tmp, "mov eax, [%s]\n", $3.varn);
+							}
 							addTempToCS(tmp);
 							sprintf(tmp, "mov [%s], eax\n", $1);
 							addTempToCS(tmp);
@@ -139,10 +147,12 @@ expresie: termen
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
-					strcpy($$.varn, temp); 
+					sprintf($$.varn, temp); 
 					
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
+					sprintf(tmp, "; %s + %s\n", $1, $3);
+					addTempToCS(tmp);
 					sprintf(tmp, "mov eax, %s\n", $1.varn);
 					addTempToCS(tmp);
 					sprintf(tmp, "add eax, %s\n", $3.varn);
@@ -204,7 +214,7 @@ instr_io: WRITE LEFT_BRACKET ID RIGHT_BRACKET SEMICOLON
 		//sprintf(tmp, "mov eax, [%s]\n", $3);
 		//sprintf(tmp, "push dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n");
 
-		sprintf(tmp, "mov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", $3);
+		sprintf(tmp, "; print(%s)\nmov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", $3, $3);
 
 		addTempToCS(tmp);
 	}	
@@ -286,7 +296,7 @@ void writeAssemblyToFile() {
 	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 10, 0\n", "%d");
 	sprintf(beginCS, "\nsegment code use32 class=code\n");
 	sprintf(start, "start:\n");
-	sprintf(endCS, "push dword 0\ncall [exit]\n");
+	sprintf(endCS, "; exit(0)\npush dword 0\ncall [exit]\n");
 
 	FILE *f = fopen("out.out", "w");
 	if(f == NULL) {
@@ -315,7 +325,7 @@ void writeAssemblyToFile() {
 
 
 void newTempName(char *s) {
-	sprintf(s, "temp%d dw 1\n", tempnr);
+	sprintf(s, "temp%d dd 0\n", tempnr);
 	addTempToDS(s);
 	sprintf(s, "temp%d", tempnr);
 	tempnr++;

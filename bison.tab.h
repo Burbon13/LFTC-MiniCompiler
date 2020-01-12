@@ -87,7 +87,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 46 "bison.y"
+#line 47 "bison.y"
 
 	char varname[10];
 	attributes attrib;

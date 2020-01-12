@@ -66,6 +66,7 @@
 #line 6 "bison.y"
 
 
+#include <ctype.h>
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -104,7 +105,7 @@ void newTempName(char *s);
 
 
 /* Line 371 of yacc.c  */
-#line 108 "bison.tab.c"
+#line 109 "bison.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -181,14 +182,14 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 46 "bison.y"
+#line 47 "bison.y"
 
 	char varname[10];
 	attributes attrib;
 
 
 /* Line 387 of yacc.c  */
-#line 192 "bison.tab.c"
+#line 193 "bison.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -216,7 +217,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 220 "bison.tab.c"
+#line 221 "bison.tab.c"
 
 #ifdef short
 # undef short
@@ -515,9 +516,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    93,    93,    96,   103,   112,   113,   116,   117,   120,
-     121,   124,   136,   137,   153,   168,   183,   200,   211,   220,
-     225
+       0,    94,    94,    97,   104,   113,   114,   117,   118,   121,
+     122,   125,   144,   145,   163,   178,   193,   210,   221,   230,
+     235
 };
 #endif
 
@@ -1437,7 +1438,7 @@ yyreduce:
     {
         case 3:
 /* Line 1792 of yacc.c  */
-#line 97 "bison.y"
+#line 98 "bison.y"
     {
 							char *tmp = (char *)malloc(sizeof(char)*100);
 							sprintf(tmp, "%s dd 0\n", (yyvsp[(2) - (3)].varname));
@@ -1448,7 +1449,7 @@ yyreduce:
 
   case 4:
 /* Line 1792 of yacc.c  */
-#line 104 "bison.y"
+#line 105 "bison.y"
     {
 							char *tmp = (char *)malloc(sizeof(char)*100);
 							sprintf(tmp, "%s dd 0\n", (yyvsp[(2) - (4)].varname));
@@ -1459,11 +1460,18 @@ yyreduce:
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 125 "bison.y"
+#line 126 "bison.y"
     {
 							char *tmp = (char *)malloc(sizeof(char)*100);
 							//expression result is in temp, so we move it into ID
-							sprintf(tmp, "mov eax, %s\n", (yyvsp[(3) - (4)].attrib).varn);
+							sprintf(tmp, "; %s = %s\n", (yyvsp[(1) - (4)].varname), (yyvsp[(3) - (4)].attrib));
+							addTempToCS(tmp);
+							if(isdigit((yyvsp[(3) - (4)].attrib).varn[0])) {
+								sprintf(tmp, "mov eax, %s\n", (yyvsp[(3) - (4)].attrib).varn);
+							} 
+							else {
+								sprintf(tmp, "mov eax, [%s]\n", (yyvsp[(3) - (4)].attrib).varn);
+							}
 							addTempToCS(tmp);
 							sprintf(tmp, "mov [%s], eax\n", (yyvsp[(1) - (4)].varname));
 							addTempToCS(tmp);
@@ -1473,15 +1481,17 @@ yyreduce:
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 138 "bison.y"
+#line 146 "bison.y"
     {
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
-					strcpy((yyval.attrib).varn, temp); 
+					sprintf((yyval.attrib).varn, temp); 
 					
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
+					sprintf(tmp, "; %s + %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
+					addTempToCS(tmp);
 					sprintf(tmp, "mov eax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
 					addTempToCS(tmp);
 					sprintf(tmp, "add eax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
@@ -1493,7 +1503,7 @@ yyreduce:
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 154 "bison.y"
+#line 164 "bison.y"
     {
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
@@ -1512,7 +1522,7 @@ yyreduce:
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 169 "bison.y"
+#line 179 "bison.y"
     {
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
@@ -1531,7 +1541,7 @@ yyreduce:
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 184 "bison.y"
+#line 194 "bison.y"
     {
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
@@ -1550,14 +1560,14 @@ yyreduce:
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 201 "bison.y"
+#line 211 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		//addTempToCS(moveVarToPrintBuffer($3));
 		//sprintf(tmp, "mov eax, [%s]\n", $3);
 		//sprintf(tmp, "push dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n");
 
-		sprintf(tmp, "mov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", (yyvsp[(3) - (5)].varname));
+		sprintf(tmp, "; print(%s)\nmov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", (yyvsp[(3) - (5)].varname), (yyvsp[(3) - (5)].varname));
 
 		addTempToCS(tmp);
 	}
@@ -1565,7 +1575,7 @@ yyreduce:
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 212 "bison.y"
+#line 222 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		sprintf(tmp, "mov ah, 0Ah\nmov dx, offset %s\nint 21h\n", (yyvsp[(3) - (5)].attrib).varn);
@@ -1575,7 +1585,7 @@ yyreduce:
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 221 "bison.y"
+#line 231 "bison.y"
     {
 					strcpy((yyval.attrib).cod, "");
 					sprintf((yyval.attrib).varn, "[%s]", (yyvsp[(1) - (1)].varname)); 
@@ -1584,7 +1594,7 @@ yyreduce:
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 226 "bison.y"
+#line 236 "bison.y"
     {
 				strcpy((yyval.attrib).cod, "");
 				strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname)); 
@@ -1593,7 +1603,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 1597 "bison.tab.c"
+#line 1607 "bison.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1825,7 +1835,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 232 "bison.y"
+#line 242 "bison.y"
 
 
 int main(int argc, char *argv[]) {	
@@ -1883,7 +1893,7 @@ void writeAssemblyToFile() {
 	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 10, 0\n", "%d");
 	sprintf(beginCS, "\nsegment code use32 class=code\n");
 	sprintf(start, "start:\n");
-	sprintf(endCS, "push dword 0\ncall [exit]\n");
+	sprintf(endCS, "; exit(0)\npush dword 0\ncall [exit]\n");
 
 	FILE *f = fopen("out.out", "w");
 	if(f == NULL) {
@@ -1912,7 +1922,7 @@ void writeAssemblyToFile() {
 
 
 void newTempName(char *s) {
-	sprintf(s, "temp%d dw 1\n", tempnr);
+	sprintf(s, "temp%d dd 0\n", tempnr);
 	addTempToDS(s);
 	sprintf(s, "temp%d", tempnr);
 	tempnr++;

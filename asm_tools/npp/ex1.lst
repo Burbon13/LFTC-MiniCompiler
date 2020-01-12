@@ -1,0 +1,38 @@
+     1                                  bits 32
+     2                                  
+     3                                  global start
+     4                                  
+     5                                  extern exit, printf, scanf
+     6                                  import exit msvcrt.dll
+     7                                  import printf msvcrt.dll
+     8                                  import scanf msvcrt.dll
+     9                                  
+    10                                  segment data use32 class=data
+    11 00000000 6E3D00                  read_int_msg db "n=", 0
+    12 00000003 25640A00                int_format db "%d", 10, 0
+    13 00000007 00000000                c dd 0
+    14 0000000B 00000000                b dd 0
+    15 0000000F 00000000                a dd 0
+    16 00000013 00000000                temp1 dd 0
+    17                                  
+    18                                  segment code use32 class=code
+    19                                  start:
+    20                                  ; a = 2
+    21 00000000 B802000000              mov eax, 2
+    22 00000005 A3[0F000000]            mov [a], eax
+    23                                  ; 10 + 2
+    24 0000000A B80A000000              mov eax, 10
+    25 0000000F 83C002                  add eax, 2
+    26 00000012 A3[13000000]            mov [temp1], eax
+    27                                  ; c = temp1
+    28 00000017 A1[13000000]            mov eax, [temp1]
+    29 0000001C A3[07000000]            mov [c], eax
+    30                                  ; print(c)
+    31 00000021 A1[07000000]            mov eax, [c]
+    32 00000026 50                      push dword eax
+    33 00000027 68[03000000]            push dword int_format
+    34 0000002C FF15[00000000]          call [printf]
+    35 00000032 83C408                  add esp, 4 * 2
+    36                                  ; exit(0)
+    37 00000035 6A00                    push dword 0
+    38 00000037 FF15[00000000]          call [exit]
