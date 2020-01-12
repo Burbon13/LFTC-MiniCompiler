@@ -6,8 +6,15 @@ int d;
 int e;
 
 begin_block
-	a = 20  - 13;
-	b = 10 + 4;
+	a = 1;
+	b = 2 + 3;
+	c = 10 - 4;
+	d = 3 * 7;
+	e = 60 / 4;
 	write(a);
+	write(b);
+	write(c);
+	write(d);
+	write(e);
 end_block
 end_program

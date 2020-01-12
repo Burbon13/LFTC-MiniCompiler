@@ -517,8 +517,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    94,    94,    97,   104,   113,   114,   117,   118,   121,
-     122,   125,   144,   145,   163,   181,   201,   219,   230,   239,
-     244
+     122,   125,   144,   145,   163,   181,   201,   223,   234,   243,
+     248
 };
 #endif
 
@@ -1558,18 +1558,22 @@ yyreduce:
 							
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
-					sprintf(tmp, "mov ax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
+					sprintf(tmp, "mov edx, 0\n");
 					addTempToCS(tmp);
-					sprintf(tmp, "div ax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
+					sprintf(tmp, "mov eax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov [%s], ax\n", temp);
+					sprintf(tmp, "mov ebx, %s\n", (yyvsp[(3) - (3)].attrib).varn);
+					addTempToCS(tmp);
+					sprintf(tmp, "idiv ebx\n");
+					addTempToCS(tmp);
+					sprintf(tmp, "mov [%s], eax\n", temp);
 					addTempToCS(tmp);
 				}
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 220 "bison.y"
+#line 224 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		//addTempToCS(moveVarToPrintBuffer($3));
@@ -1584,7 +1588,7 @@ yyreduce:
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 231 "bison.y"
+#line 235 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		sprintf(tmp, "mov ah, 0Ah\nmov dx, offset %s\nint 21h\n", (yyvsp[(3) - (5)].attrib).varn);
@@ -1594,7 +1598,7 @@ yyreduce:
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 240 "bison.y"
+#line 244 "bison.y"
     {
 					strcpy((yyval.attrib).cod, "");
 					sprintf((yyval.attrib).varn, "[%s]", (yyvsp[(1) - (1)].varname)); 
@@ -1603,7 +1607,7 @@ yyreduce:
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 245 "bison.y"
+#line 249 "bison.y"
     {
 				strcpy((yyval.attrib).cod, "");
 				strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname)); 
@@ -1612,7 +1616,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 1616 "bison.tab.c"
+#line 1620 "bison.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1844,7 +1848,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 251 "bison.y"
+#line 255 "bison.y"
 
 
 int main(int argc, char *argv[]) {	

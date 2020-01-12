@@ -17,25 +17,70 @@ b dd 0
 a dd 0
 temp1 dd 0
 temp2 dd 0
+temp3 dd 0
+temp4 dd 0
 
 segment code use32 class=code
 start:
-; 20 - 13
-mov eax, 20
-sub eax, 23
-mov [temp1], eax
-; a = temp1
-mov eax, [temp1]
+; a = 1
+mov eax, 1
 mov [a], eax
-; 10 + 4
-mov eax, 10
-add eax, 4
-mov [temp2], eax
-; b = temp2
-mov eax, [temp2]
+; 2 + 3
+mov eax, 2
+add eax, 3
+mov [temp1], eax
+; b = temp1
+mov eax, [temp1]
 mov [b], eax
+; 10 - 4
+mov eax, 10
+sub eax, 4
+mov [temp2], eax
+; c = temp2
+mov eax, [temp2]
+mov [c], eax
+; 3 * 7
+mov eax, 3
+mov ebx, 7
+imul ebx
+mov [temp3], eax
+; d = temp3
+mov eax, [temp3]
+mov [d], eax
+mov edx, 0
+mov eax, 60
+mov ebx, 4
+idiv ebx
+mov [temp4], eax
+; e = temp4
+mov eax, [temp4]
+mov [e], eax
 ; print(a)
 mov eax, [a]
+push dword eax
+push dword int_format
+call [printf]
+add esp, 4 * 2
+; print(b)
+mov eax, [b]
+push dword eax
+push dword int_format
+call [printf]
+add esp, 4 * 2
+; print(c)
+mov eax, [c]
+push dword eax
+push dword int_format
+call [printf]
+add esp, 4 * 2
+; print(d)
+mov eax, [d]
+push dword eax
+push dword int_format
+call [printf]
+add esp, 4 * 2
+; print(e)
+mov eax, [e]
 push dword eax
 push dword int_format
 call [printf]

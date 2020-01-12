@@ -207,11 +207,15 @@ expresie: termen
 							
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
-					sprintf(tmp, "mov ax, %s\n", $1.varn);
+					sprintf(tmp, "mov edx, 0\n");
 					addTempToCS(tmp);
-					sprintf(tmp, "div ax, %s\n", $3.varn);
+					sprintf(tmp, "mov eax, %s\n", $1.varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov [%s], ax\n", temp);
+					sprintf(tmp, "mov ebx, %s\n", $3.varn);
+					addTempToCS(tmp);
+					sprintf(tmp, "idiv ebx\n");
+					addTempToCS(tmp);
+					sprintf(tmp, "mov [%s], eax\n", temp);
 					addTempToCS(tmp);
 				}
 			;
