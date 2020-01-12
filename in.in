@@ -9,7 +9,7 @@ begin_block
 	a = 2;
 	b = 3;
 	c = a + b;
-	d = c * 10;
+	d = c * 20;
 	e = d - 1;
 	e = e / 2;
 	write(a);
@@ -17,7 +17,7 @@ begin_block
 	write(c);
 	write(d);
 	write(e);
-	
+
 	read(a);
 	a = 100 * a;
 	write(a);

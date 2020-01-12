@@ -517,8 +517,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    94,    94,    97,   104,   113,   114,   117,   118,   121,
-     122,   125,   144,   145,   161,   177,   195,   217,   223,   236,
-     242
+     122,   125,   144,   145,   161,   177,   195,   217,   223,   235,
+     241
 };
 #endif
 
@@ -1468,7 +1468,7 @@ yyreduce:
 							addTempToCS(tmp);
 							if(isdigit((yyvsp[(3) - (4)].attrib).varn[0])) {
 								sprintf(tmp, "mov eax, %s\n", (yyvsp[(3) - (4)].attrib).varn);
-							} 
+							}
 							else {
 								sprintf(tmp, "mov eax, [%s]\n", (yyvsp[(3) - (4)].attrib).varn);
 							}
@@ -1485,8 +1485,8 @@ yyreduce:
     {
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
-					sprintf((yyval.attrib).varn, "%s", temp); 
-					
+					sprintf((yyval.attrib).varn, "%s", temp);
+
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s + %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
 					addTempToCS(tmp);
@@ -1506,7 +1506,7 @@ yyreduce:
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf((yyval.attrib).varn, "%s", temp);
-								
+
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s - %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
 					addTempToCS(tmp);
@@ -1526,7 +1526,7 @@ yyreduce:
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf((yyval.attrib).varn, "%s", temp);
-					
+
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s * %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
 					addTempToCS(tmp);
@@ -1548,7 +1548,7 @@ yyreduce:
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf((yyval.attrib).varn, "%s", temp);
-							
+
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s / %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
 					addTempToCS(tmp);
@@ -1591,20 +1591,20 @@ yyreduce:
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 237 "bison.y"
+#line 236 "bison.y"
     {
 					strcpy((yyval.attrib).cod, "");
-					sprintf((yyval.attrib).varn, "[%s]", (yyvsp[(1) - (1)].varname)); 
-					sprintf((yyval.attrib).pointer, "%s", (yyvsp[(1) - (1)].varname)); 
+					sprintf((yyval.attrib).varn, "[%s]", (yyvsp[(1) - (1)].varname));
+					sprintf((yyval.attrib).pointer, "%s", (yyvsp[(1) - (1)].varname));
 				}
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 243 "bison.y"
+#line 242 "bison.y"
     {
 				strcpy((yyval.attrib).cod, "");
-				strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname)); 
+				strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname));
 			}
     break;
 
@@ -1842,10 +1842,10 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 249 "bison.y"
+#line 248 "bison.y"
 
 
-int main(int argc, char *argv[]) {	
+int main(int argc, char *argv[]) {
 	memset(DS, 0, 10000);
 	memset(CS, 0, 10000);
 
@@ -1860,13 +1860,13 @@ int main(int argc, char *argv[]) {
 	}
 
 	writeAssemblyToFile();
-	
+
 	return 0;
 }
 
 
 void addTempToDS(char *s) {
-	strcat(DS, s);		
+	strcat(DS, s);
 }
 
 
@@ -1891,7 +1891,7 @@ void writeAssemblyToFile() {
 	char *endCS = (char *) malloc(sizeof(char)*30);
 	char *init_code = (char *) malloc(sizeof(char)*30);
 	char *end_code = (char *) malloc(sizeof(char)*30);
-	
+
 	sprintf(bits32, "bits 32\n\n");
 	sprintf(globalStart, "global start\n\n");
 	sprintf(imports, "extern exit, printf, scanf\nimport exit msvcrt.dll\nimport printf msvcrt.dll\nimport scanf msvcrt.dll\n\n");

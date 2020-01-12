@@ -84,13 +84,13 @@ void newTempName(char *s);
 
 
 %token <varname> ID
-%token <varname> CONST 
+%token <varname> CONST
 %type <attrib> expresie
 %type <attrib> termen
 
 
 %%
-	
+
 program: BEGIN_PROGRAM lista_declaratii BEGIN_BLOCK lista_instr END_BLOCK END_PROGRAM
 			;
 
@@ -113,16 +113,16 @@ lista_declaratii: tip ID SEMICOLON
 tip: INT
 	| REAL
 	;
-	
-lista_instr: instr 
+
+lista_instr: instr
 		| instr lista_instr
 		;
-				
+
 instr: instr_atribuire
 	| instr_io
 	;
 
-instr_atribuire: ID ASSUME expresie SEMICOLON		
+instr_atribuire: ID ASSUME expresie SEMICOLON
 						{
 							char *tmp = (char *)malloc(sizeof(char)*100);
 							//expression result is in temp, so we move it into ID
@@ -130,7 +130,7 @@ instr_atribuire: ID ASSUME expresie SEMICOLON
 							addTempToCS(tmp);
 							if(isdigit($3.varn[0])) {
 								sprintf(tmp, "mov eax, %s\n", $3.varn);
-							} 
+							}
 							else {
 								sprintf(tmp, "mov eax, [%s]\n", $3.varn);
 							}
@@ -146,8 +146,8 @@ expresie: termen
 				{
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
-					sprintf($$.varn, "%s", temp); 
-					
+					sprintf($$.varn, "%s", temp);
+
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s + %s\n", $1, $3);
 					addTempToCS(tmp);
@@ -163,7 +163,7 @@ expresie: termen
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf($$.varn, "%s", temp);
-								
+
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s - %s\n", $1, $3);
 					addTempToCS(tmp);
@@ -179,7 +179,7 @@ expresie: termen
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf($$.varn, "%s", temp);
-					
+
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s * %s\n", $1, $3);
 					addTempToCS(tmp);
@@ -197,7 +197,7 @@ expresie: termen
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
 					sprintf($$.varn, "%s", temp);
-							
+
 					char *tmp = (char *)malloc(sizeof(char)*100);
 					sprintf(tmp, "; %s / %s\n", $1, $3);
 					addTempToCS(tmp);
@@ -213,14 +213,14 @@ expresie: termen
 					addTempToCS(tmp);
 				}
 			;
-			  
+
 instr_io: WRITE LEFT_BRACKET ID RIGHT_BRACKET SEMICOLON
 	{
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		sprintf(tmp, "; print(%s)\nmov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", $3, $3);
 		addTempToCS(tmp);
-	}	
-	| READ LEFT_BRACKET termen RIGHT_BRACKET SEMICOLON	
+	}
+	| READ LEFT_BRACKET termen RIGHT_BRACKET SEMICOLON
 	{
 		char *tmp = (char *)malloc(sizeof(char)*100);
 
@@ -232,23 +232,22 @@ instr_io: WRITE LEFT_BRACKET ID RIGHT_BRACKET SEMICOLON
 	}
 	;
 
- 
-termen: ID			
+termen: ID
 				{
 					strcpy($$.cod, "");
-					sprintf($$.varn, "[%s]", $1); 
-					sprintf($$.pointer, "%s", $1); 
+					sprintf($$.varn, "[%s]", $1);
+					sprintf($$.pointer, "%s", $1);
 				}
-		| CONST	
+		| CONST
 			{
 				strcpy($$.cod, "");
-				strcpy($$.varn, $1); 
+				strcpy($$.varn, $1);
 			}
 		;
-			
+
 %%
 
-int main(int argc, char *argv[]) {	
+int main(int argc, char *argv[]) {
 	memset(DS, 0, 10000);
 	memset(CS, 0, 10000);
 
@@ -263,13 +262,13 @@ int main(int argc, char *argv[]) {
 	}
 
 	writeAssemblyToFile();
-	
+
 	return 0;
 }
 
 
 void addTempToDS(char *s) {
-	strcat(DS, s);		
+	strcat(DS, s);
 }
 
 
@@ -294,7 +293,7 @@ void writeAssemblyToFile() {
 	char *endCS = (char *) malloc(sizeof(char)*30);
 	char *init_code = (char *) malloc(sizeof(char)*30);
 	char *end_code = (char *) malloc(sizeof(char)*30);
-	
+
 	sprintf(bits32, "bits 32\n\n");
 	sprintf(globalStart, "global start\n\n");
 	sprintf(imports, "extern exit, printf, scanf\nimport exit msvcrt.dll\nimport printf msvcrt.dll\nimport scanf msvcrt.dll\n\n");

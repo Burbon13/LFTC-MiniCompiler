@@ -7,7 +7,7 @@ struct attrib{
   char pointer[12];
   char cod[250];
 };
-typedef struct attrib attributes;    
-    
+typedef struct attrib attributes;
+
 
 #endif

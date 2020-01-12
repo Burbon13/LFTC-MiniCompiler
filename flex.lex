@@ -65,4 +65,4 @@ while					{ printf("%s ", yytext); return WHILE; }
 {const}				{ printf("%s ", yytext); strcpy(yylval.varname,yytext); return CONST;}
 
 
-%	
+%

@@ -38,9 +38,9 @@ mov [temp1], eax
 ; c = temp1
 mov eax, [temp1]
 mov [c], eax
-; [c] * 10
+; [c] * 20
 mov eax, [c]
-mov ebx, 10
+mov ebx, 20
 imul ebx
 mov [temp2], eax
 ; d = temp2
