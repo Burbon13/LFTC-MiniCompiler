@@ -2,10 +2,12 @@ begin_program
 int a;
 int b;
 int c;
+int d;
+int e;
 
 begin_block
-	a = 2;
-	c = 10 + 2;
-	write(c);
+	a = 20  - 13;
+	b = 10 + 4;
+	write(a);
 end_block
 end_program

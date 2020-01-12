@@ -10,29 +10,36 @@
     10                                  segment data use32 class=data
     11 00000000 6E3D00                  read_int_msg db "n=", 0
     12 00000003 25640A00                int_format db "%d", 10, 0
-    13 00000007 00000000                c dd 0
-    14 0000000B 00000000                b dd 0
-    15 0000000F 00000000                a dd 0
-    16 00000013 00000000                temp1 dd 0
-    17                                  
-    18                                  segment code use32 class=code
-    19                                  start:
-    20                                  ; a = 2
-    21 00000000 B802000000              mov eax, 2
-    22 00000005 A3[0F000000]            mov [a], eax
-    23                                  ; 10 + 2
-    24 0000000A B80A000000              mov eax, 10
-    25 0000000F 83C002                  add eax, 2
-    26 00000012 A3[13000000]            mov [temp1], eax
-    27                                  ; c = temp1
-    28 00000017 A1[13000000]            mov eax, [temp1]
-    29 0000001C A3[07000000]            mov [c], eax
-    30                                  ; print(c)
-    31 00000021 A1[07000000]            mov eax, [c]
-    32 00000026 50                      push dword eax
-    33 00000027 68[03000000]            push dword int_format
-    34 0000002C FF15[00000000]          call [printf]
-    35 00000032 83C408                  add esp, 4 * 2
-    36                                  ; exit(0)
-    37 00000035 6A00                    push dword 0
-    38 00000037 FF15[00000000]          call [exit]
+    13 00000007 00000000                e dd 0
+    14 0000000B 00000000                d dd 0
+    15 0000000F 00000000                c dd 0
+    16 00000013 00000000                b dd 0
+    17 00000017 00000000                a dd 0
+    18 0000001B 00000000                temp1 dd 0
+    19 0000001F 00000000                temp2 dd 0
+    20                                  
+    21                                  segment code use32 class=code
+    22                                  start:
+    23                                  ; 20 - 13
+    24 00000000 B814000000              mov eax, 20
+    25 00000005 83E817                  sub eax, 23
+    26 00000008 A3[1B000000]            mov [temp1], eax
+    27                                  ; a = temp1
+    28 0000000D A1[1B000000]            mov eax, [temp1]
+    29 00000012 A3[17000000]            mov [a], eax
+    30                                  ; 10 + 4
+    31 00000017 B80A000000              mov eax, 10
+    32 0000001C 83C004                  add eax, 4
+    33 0000001F A3[1F000000]            mov [temp2], eax
+    34                                  ; b = temp2
+    35 00000024 A1[1F000000]            mov eax, [temp2]
+    36 00000029 A3[13000000]            mov [b], eax
+    37                                  ; print(a)
+    38 0000002E A1[17000000]            mov eax, [a]
+    39 00000033 50                      push dword eax
+    40 00000034 68[03000000]            push dword int_format
+    41 00000039 FF15[00000000]          call [printf]
+    42 0000003F 83C408                  add esp, 4 * 2
+    43                                  ; exit(0)
+    44 00000042 6A00                    push dword 0
+    45 00000044 FF15[00000000]          call [exit]

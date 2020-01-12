@@ -147,7 +147,7 @@ expresie: termen
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
-					sprintf($$.varn, temp); 
+					sprintf($$.varn, "%s", temp); 
 					
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
@@ -165,9 +165,12 @@ expresie: termen
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
+					sprintf($$.varn, "%s", temp);
 								
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
+					sprintf(tmp, "; %s - %s\n", $1, $3);
+					addTempToCS(tmp);
 					sprintf(tmp, "mov eax, %s\n", $1.varn);
 					addTempToCS(tmp);
 					sprintf(tmp, "sub eax, %s\n", $3.varn);
@@ -180,14 +183,19 @@ expresie: termen
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
+					sprintf($$.varn, "%s", temp);
 					
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
-					sprintf(tmp, "mov ax, %s\n", $1.varn);
+					sprintf(tmp, "; %s * %s\n", $1, $3);
 					addTempToCS(tmp);
-					sprintf(tmp, "mul ax, %s\n", $3.varn);
+					sprintf(tmp, "mov eax, %s\n", $1.varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov [%s], ax\n", temp);
+					sprintf(tmp, "mov ebx, %s\n", $3.varn);
+					addTempToCS(tmp);
+					sprintf(tmp, "imul ebx\n", $3.varn);
+					addTempToCS(tmp);
+					sprintf(tmp, "mov [%s], eax\n", temp);
 					addTempToCS(tmp);
 				}
 			| termen DIVIDE termen
@@ -195,6 +203,7 @@ expresie: termen
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
+					sprintf($$.varn, "%s", temp);
 							
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);

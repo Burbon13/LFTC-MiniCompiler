@@ -1,9 +1,7 @@
 <NotepadPlus>
     <Session activeView="0">
         <mainView activeIndex="0">
-            <File firstVisibleLine="3" xOffset="0" scrollWidth="348" startPos="292" endPos="292" selMode="0" lang="Assembly" encoding="-1" filename="C:\work\university\y3\S1\LFTC\labs\flex_bison_asm\asm_tools\npp\ex1.asm" backupFilePath="C:\work\university\y3\S1\LFTC\labs\flex_bison_asm\asm_tools\npp\backup\ex1.asm@2020-01-12_131030" originalFileLastModifTimestamp="1578827242" mapFirstVisibleDisplayLine="-1" mapFirstVisibleDocLine="-1" mapLastVisibleDocLine="-1" mapNbLine="-1" mapHigherPos="-1" mapWidth="-1" mapHeight="-1" mapKByteInDoc="3014698" mapWrapIndentMode="-1" mapIsWrap="no">
-                <Mark line="19" />
-            </File>
+            <File firstVisibleLine="12" xOffset="0" scrollWidth="348" startPos="318" endPos="318" selMode="0" lang="Assembly" encoding="-1" filename="C:\work\university\y3\S1\LFTC\labs\flex_bison_asm\asm_tools\npp\ex1.asm" backupFilePath="C:\work\university\y3\S1\LFTC\labs\flex_bison_asm\asm_tools\npp\backup\ex1.asm@2020-01-12_134222" originalFileLastModifTimestamp="1578829278" mapFirstVisibleDisplayLine="-1" mapFirstVisibleDocLine="-1" mapLastVisibleDocLine="-1" mapNbLine="-1" mapHigherPos="-1" mapWidth="-1" mapHeight="-1" mapKByteInDoc="3014698" mapWrapIndentMode="-1" mapIsWrap="no" />
         </mainView>
         <subView activeIndex="0" />
     </Session>

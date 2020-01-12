@@ -517,8 +517,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    94,    94,    97,   104,   113,   114,   117,   118,   121,
-     122,   125,   144,   145,   163,   178,   193,   210,   221,   230,
-     235
+     122,   125,   144,   145,   163,   181,   201,   219,   230,   239,
+     244
 };
 #endif
 
@@ -1486,7 +1486,7 @@ yyreduce:
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
-					sprintf((yyval.attrib).varn, temp); 
+					sprintf((yyval.attrib).varn, "%s", temp); 
 					
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
@@ -1508,9 +1508,12 @@ yyreduce:
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
+					sprintf((yyval.attrib).varn, "%s", temp);
 								
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
+					sprintf(tmp, "; %s - %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
+					addTempToCS(tmp);
 					sprintf(tmp, "mov eax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
 					addTempToCS(tmp);
 					sprintf(tmp, "sub eax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
@@ -1522,30 +1525,36 @@ yyreduce:
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 179 "bison.y"
+#line 182 "bison.y"
     {
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
+					sprintf((yyval.attrib).varn, "%s", temp);
 					
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
-					sprintf(tmp, "mov ax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
+					sprintf(tmp, "; %s * %s\n", (yyvsp[(1) - (3)].attrib), (yyvsp[(3) - (3)].attrib));
 					addTempToCS(tmp);
-					sprintf(tmp, "mul ax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
+					sprintf(tmp, "mov eax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov [%s], ax\n", temp);
+					sprintf(tmp, "mov ebx, %s\n", (yyvsp[(3) - (3)].attrib).varn);
+					addTempToCS(tmp);
+					sprintf(tmp, "imul ebx\n", (yyvsp[(3) - (3)].attrib).varn);
+					addTempToCS(tmp);
+					sprintf(tmp, "mov [%s], eax\n", temp);
 					addTempToCS(tmp);
 				}
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 194 "bison.y"
+#line 202 "bison.y"
     {
 					//make new temp
 					char *temp = (char *)malloc(sizeof(char)*100);
 					newTempName(temp);
+					sprintf((yyval.attrib).varn, "%s", temp);
 							
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
@@ -1560,7 +1569,7 @@ yyreduce:
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 211 "bison.y"
+#line 220 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		//addTempToCS(moveVarToPrintBuffer($3));
@@ -1575,7 +1584,7 @@ yyreduce:
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 222 "bison.y"
+#line 231 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		sprintf(tmp, "mov ah, 0Ah\nmov dx, offset %s\nint 21h\n", (yyvsp[(3) - (5)].attrib).varn);
@@ -1585,7 +1594,7 @@ yyreduce:
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 231 "bison.y"
+#line 240 "bison.y"
     {
 					strcpy((yyval.attrib).cod, "");
 					sprintf((yyval.attrib).varn, "[%s]", (yyvsp[(1) - (1)].varname)); 
@@ -1594,7 +1603,7 @@ yyreduce:
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 236 "bison.y"
+#line 245 "bison.y"
     {
 				strcpy((yyval.attrib).cod, "");
 				strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname)); 
@@ -1603,7 +1612,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 1607 "bison.tab.c"
+#line 1616 "bison.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1835,7 +1844,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 242 "bison.y"
+#line 251 "bison.y"
 
 
 int main(int argc, char *argv[]) {	
