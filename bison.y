@@ -96,14 +96,14 @@ program: BEGIN_PROGRAM lista_declaratii BEGIN_BLOCK lista_instr END_BLOCK END_PR
 lista_declaratii: tip ID SEMICOLON
 						{
 							char *tmp = (char *)malloc(sizeof(char)*100);
-							sprintf(tmp, "%s dd 1\n", $2);
+							sprintf(tmp, "%s dd 0\n", $2);
 							addTempToDS(tmp);
 							free(tmp);
 						}
 					| tip ID SEMICOLON lista_declaratii
 						{
 							char *tmp = (char *)malloc(sizeof(char)*100);
-							sprintf(tmp, "%s dd 1\n", $2);
+							sprintf(tmp, "%s dd 0\n", $2);
 							addTempToDS(tmp);
 							free(tmp);
 						}
@@ -127,7 +127,7 @@ instr_atribuire: ID ASSUME expresie SEMICOLON
 							//expression result is in temp, so we move it into ID
 							sprintf(tmp, "mov eax, %s\n", $3.varn);
 							addTempToCS(tmp);
-							sprintf(tmp, "mov %s, ax\n", $1);
+							sprintf(tmp, "mov [%s], eax\n", $1);
 							addTempToCS(tmp);
 							free(tmp);
 						}
@@ -143,11 +143,11 @@ expresie: termen
 					
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
-					sprintf(tmp, "mov ax, %s\n", $1.varn);
+					sprintf(tmp, "mov eax, %s\n", $1.varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "add ax, %s\n", $3.varn);
+					sprintf(tmp, "add eax, %s\n", $3.varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov %s, ax\n", temp);
+					sprintf(tmp, "mov [%s], eax\n", temp);
 					addTempToCS(tmp);
 				}
 			| termen MINUS termen
@@ -158,11 +158,11 @@ expresie: termen
 								
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
-					sprintf(tmp, "mov ax, %s\n", $1.varn);
+					sprintf(tmp, "mov eax, %s\n", $1.varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "sub ax, %s\n", $3.varn);
+					sprintf(tmp, "sub eax, %s\n", $3.varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov %s, ax\n", temp);
+					sprintf(tmp, "mov [%s], eax\n", temp);
 					addTempToCS(tmp);
 				}
 			| termen MULTIPLY termen
@@ -177,7 +177,7 @@ expresie: termen
 					addTempToCS(tmp);
 					sprintf(tmp, "mul ax, %s\n", $3.varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov %s, ax\n", temp);
+					sprintf(tmp, "mov [%s], ax\n", temp);
 					addTempToCS(tmp);
 				}
 			| termen DIVIDE termen
@@ -192,7 +192,7 @@ expresie: termen
 					addTempToCS(tmp);
 					sprintf(tmp, "div ax, %s\n", $3.varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov %s, ax\n", temp);
+					sprintf(tmp, "mov [%s], ax\n", temp);
 					addTempToCS(tmp);
 				}
 			;
@@ -200,8 +200,12 @@ expresie: termen
 instr_io: WRITE LEFT_BRACKET ID RIGHT_BRACKET SEMICOLON
 	{
 		char *tmp = (char *)malloc(sizeof(char)*100);
-		addTempToCS(moveVarToPrintBuffer($3));
-		sprintf(tmp, "mov dx, offset buffer\nmov al, 09h\nint 21h\n");
+		//addTempToCS(moveVarToPrintBuffer($3));
+		//sprintf(tmp, "mov eax, [%s]\n", $3);
+		//sprintf(tmp, "push dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n");
+
+		sprintf(tmp, "mov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", $3);
+
 		addTempToCS(tmp);
 	}	
 	| READ LEFT_BRACKET termen RIGHT_BRACKET SEMICOLON	
@@ -216,7 +220,7 @@ instr_io: WRITE LEFT_BRACKET ID RIGHT_BRACKET SEMICOLON
 termen: ID			
 				{
 					strcpy($$.cod, "");
-					strcpy($$.varn, $1); 
+					sprintf($$.varn, "[%s]", $1); 
 				}
 		| CONST	
 			{
@@ -231,7 +235,6 @@ int main(int argc, char *argv[]) {
 	memset(DS, 0, 1000);
 	memset(CS, 0, 1000);
 
-	//open the file in read mode
 	FILE *f = fopen("in.in", "r");
 	if(!f) {
 		perror("Could not open file!");
@@ -277,10 +280,10 @@ void writeAssemblyToFile() {
 	char *init_code = (char *) malloc(sizeof(char)*30);
 	char *end_code = (char *) malloc(sizeof(char)*30);
 	
-	sprintf(bits32, "bits32\n\n");
+	sprintf(bits32, "bits 32\n\n");
 	sprintf(globalStart, "global start\n\n");
 	sprintf(imports, "extern exit, printf, scanf\nimport exit msvcrt.dll\nimport printf msvcrt.dll\nimport scanf msvcrt.dll\n\n");
-	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 0\n", "%d");
+	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 10, 0\n", "%d");
 	sprintf(beginCS, "\nsegment code use32 class=code\n");
 	sprintf(start, "start:\n");
 	sprintf(endCS, "push dword 0\ncall [exit]\n");

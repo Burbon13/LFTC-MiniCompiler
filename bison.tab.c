@@ -516,8 +516,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    93,    93,    96,   103,   112,   113,   116,   117,   120,
-     121,   124,   136,   137,   153,   168,   183,   200,   207,   216,
-     221
+     121,   124,   136,   137,   153,   168,   183,   200,   211,   220,
+     225
 };
 #endif
 
@@ -1440,7 +1440,7 @@ yyreduce:
 #line 97 "bison.y"
     {
 							char *tmp = (char *)malloc(sizeof(char)*100);
-							sprintf(tmp, "%s dd 1\n", (yyvsp[(2) - (3)].varname));
+							sprintf(tmp, "%s dd 0\n", (yyvsp[(2) - (3)].varname));
 							addTempToDS(tmp);
 							free(tmp);
 						}
@@ -1451,7 +1451,7 @@ yyreduce:
 #line 104 "bison.y"
     {
 							char *tmp = (char *)malloc(sizeof(char)*100);
-							sprintf(tmp, "%s dd 1\n", (yyvsp[(2) - (4)].varname));
+							sprintf(tmp, "%s dd 0\n", (yyvsp[(2) - (4)].varname));
 							addTempToDS(tmp);
 							free(tmp);
 						}
@@ -1465,7 +1465,7 @@ yyreduce:
 							//expression result is in temp, so we move it into ID
 							sprintf(tmp, "mov eax, %s\n", (yyvsp[(3) - (4)].attrib).varn);
 							addTempToCS(tmp);
-							sprintf(tmp, "mov %s, ax\n", (yyvsp[(1) - (4)].varname));
+							sprintf(tmp, "mov [%s], eax\n", (yyvsp[(1) - (4)].varname));
 							addTempToCS(tmp);
 							free(tmp);
 						}
@@ -1482,11 +1482,11 @@ yyreduce:
 					
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
-					sprintf(tmp, "mov ax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
+					sprintf(tmp, "mov eax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "add ax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
+					sprintf(tmp, "add eax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov %s, ax\n", temp);
+					sprintf(tmp, "mov [%s], eax\n", temp);
 					addTempToCS(tmp);
 				}
     break;
@@ -1501,11 +1501,11 @@ yyreduce:
 								
 					//add code instructions
 					char *tmp = (char *)malloc(sizeof(char)*100);
-					sprintf(tmp, "mov ax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
+					sprintf(tmp, "mov eax, %s\n", (yyvsp[(1) - (3)].attrib).varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "sub ax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
+					sprintf(tmp, "sub eax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov %s, ax\n", temp);
+					sprintf(tmp, "mov [%s], eax\n", temp);
 					addTempToCS(tmp);
 				}
     break;
@@ -1524,7 +1524,7 @@ yyreduce:
 					addTempToCS(tmp);
 					sprintf(tmp, "mul ax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov %s, ax\n", temp);
+					sprintf(tmp, "mov [%s], ax\n", temp);
 					addTempToCS(tmp);
 				}
     break;
@@ -1543,7 +1543,7 @@ yyreduce:
 					addTempToCS(tmp);
 					sprintf(tmp, "div ax, %s\n", (yyvsp[(3) - (3)].attrib).varn);
 					addTempToCS(tmp);
-					sprintf(tmp, "mov %s, ax\n", temp);
+					sprintf(tmp, "mov [%s], ax\n", temp);
 					addTempToCS(tmp);
 				}
     break;
@@ -1553,15 +1553,19 @@ yyreduce:
 #line 201 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
-		addTempToCS(moveVarToPrintBuffer((yyvsp[(3) - (5)].varname)));
-		sprintf(tmp, "mov dx, offset buffer\nmov al, 09h\nint 21h\n");
+		//addTempToCS(moveVarToPrintBuffer($3));
+		//sprintf(tmp, "mov eax, [%s]\n", $3);
+		//sprintf(tmp, "push dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n");
+
+		sprintf(tmp, "mov eax, [%s]\npush dword eax\npush dword int_format\ncall [printf]\nadd esp, 4 * 2\n", (yyvsp[(3) - (5)].varname));
+
 		addTempToCS(tmp);
 	}
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 208 "bison.y"
+#line 212 "bison.y"
     {
 		char *tmp = (char *)malloc(sizeof(char)*100);
 		sprintf(tmp, "mov ah, 0Ah\nmov dx, offset %s\nint 21h\n", (yyvsp[(3) - (5)].attrib).varn);
@@ -1571,16 +1575,16 @@ yyreduce:
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 217 "bison.y"
+#line 221 "bison.y"
     {
 					strcpy((yyval.attrib).cod, "");
-					strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname)); 
+					sprintf((yyval.attrib).varn, "[%s]", (yyvsp[(1) - (1)].varname)); 
 				}
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 222 "bison.y"
+#line 226 "bison.y"
     {
 				strcpy((yyval.attrib).cod, "");
 				strcpy((yyval.attrib).varn, (yyvsp[(1) - (1)].varname)); 
@@ -1589,7 +1593,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 1593 "bison.tab.c"
+#line 1597 "bison.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1821,14 +1825,13 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 228 "bison.y"
+#line 232 "bison.y"
 
 
 int main(int argc, char *argv[]) {	
 	memset(DS, 0, 1000);
 	memset(CS, 0, 1000);
 
-	//open the file in read mode
 	FILE *f = fopen("in.in", "r");
 	if(!f) {
 		perror("Could not open file!");
@@ -1874,10 +1877,10 @@ void writeAssemblyToFile() {
 	char *init_code = (char *) malloc(sizeof(char)*30);
 	char *end_code = (char *) malloc(sizeof(char)*30);
 	
-	sprintf(bits32, "bits32\n\n");
+	sprintf(bits32, "bits 32\n\n");
 	sprintf(globalStart, "global start\n\n");
 	sprintf(imports, "extern exit, printf, scanf\nimport exit msvcrt.dll\nimport printf msvcrt.dll\nimport scanf msvcrt.dll\n\n");
-	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 0\n", "%d");
+	sprintf(dataSegment, "segment data use32 class=data\nread_int_msg db \"n=\", 0\nint_format db \"%s\", 10, 0\n", "%d");
 	sprintf(beginCS, "\nsegment code use32 class=code\n");
 	sprintf(start, "start:\n");
 	sprintf(endCS, "push dword 0\ncall [exit]\n");

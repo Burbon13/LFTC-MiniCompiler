@@ -13,6 +13,7 @@
         <File filename="d:\DOCS\UBB\ASC\asm_tools\npp\Plugins\Config\asm_template_ro.asm" />
         <File filename="D:\work\check\test.asm" />
         <File filename="D:\DOCS\UBB\ASC\intrebari_TODOs.txt" />
+        <File filename="C:\work\university\y3\S1\LFTC\labs\flex_bison_asm\asm_tools\npp\vai.txt" />
     </History>
     <GUIConfigs>
         <GUIConfig name="ToolBar" visible="yes">standard</GUIConfig>
@@ -21,7 +22,7 @@
         <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" replaceBySpace="yes" size="4" />
-        <GUIConfig name="AppPosition" x="0" y="342" width="1100" height="700" isMaximized="yes" />
+        <GUIConfig name="AppPosition" x="0" y="339" width="1100" height="700" isMaximized="yes" />
         <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20080426">no</GUIConfig>
         <GUIConfig name="Auto-detection">yes</GUIConfig>
         <GUIConfig name="CheckHistoryFiles">no</GUIConfig>
@@ -47,7 +48,7 @@
         <GUIConfig name="ScintillaGlobalSettings" enableMultiSelection="no" />
         <GUIConfig name="openSaveDir" value="0" defaultDirPath="" />
         <GUIConfig name="titleBar" short="no" />
-        <GUIConfig name="stylerTheme" path="D:\DOCS\UBB\ASC\asm_tools\npp\stylers.xml" />
+        <GUIConfig name="stylerTheme" path="C:\work\university\y3\S1\LFTC\labs\flex_bison_asm\asm_tools\npp\stylers.xml" />
         <GUIConfig name="wordCharList" useDefault="yes" charsAdded="" />
         <GUIConfig name="delimiterSelection" leftmostDelimiter="40" rightmostDelimiter="41" delimiterSelectionOnEntireDocument="no" />
         <GUIConfig name="multiInst" setting="0" />
@@ -60,7 +61,7 @@
             <ActiveTabs cont="0" activeTab="-1" />
             <ActiveTabs cont="1" activeTab="-1" />
             <ActiveTabs cont="2" activeTab="-1" />
-            <ActiveTabs cont="3" activeTab="-1" />
+            <ActiveTabs cont="3" activeTab="0" />
         </GUIConfig>
     </GUIConfigs>
     <ProjectPanels>

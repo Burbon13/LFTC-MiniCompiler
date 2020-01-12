@@ -1,8 +1,14 @@
 begin_program
 int a;
 int b;
+int c;
 
 begin_block
 	a = 3;
+	b = 5;
+	c = 10;
+	write(a);
+	write(b);
+	write(c);
 end_block
 end_program
